@@ -7,16 +7,25 @@ const auth = firebase.auth();
 const firestore = firebase.firestore();
 
 const ChatRoom = () => {
-  const GET_MESSAGES = firestore
-    .collection('messages')
-    .orderBy('createdAt')
-    .limit(32);
+  const messageCollection = firestore.collection('messages');
+  const GET_MESSAGES = messageCollection.orderBy('createdAt').limit(32);
 
   const [messages] = useCollectionData(GET_MESSAGES, { idField: 'id' });
   const [formValue, setFormValue] = useState('');
 
   const sendMessage = async (e) => {
     e.preventDefault();
+
+    const { uid, photoURL } = auth.currentUser;
+
+    await messageCollection.add({
+      text: formValue,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      uid,
+      photoURL
+    });
+
+    setFormValue('');
   };
 
   return (
