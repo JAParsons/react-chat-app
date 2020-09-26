@@ -10,10 +10,11 @@ const App = () => {
   const [user] = useAuthState(auth);
 
   return (
-    <div>
-      <h1>React Chat App</h1>
-      <Logout />
-      {user ? <ChatRoom /> : <Login />}
+    <div className="app">
+      <div className="app-header">
+        <Logout />
+      </div>
+      <div className="app-body">{user ? <ChatRoom /> : <Login />}</div>
     </div>
   );
 };
@@ -23,12 +24,20 @@ const Login = () => {
     auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
   };
 
-  return <button onClick={loginWithGoogle}>Login with Google</button>;
+  return (
+    <button className="login" onClick={loginWithGoogle}>
+      Login with Google
+    </button>
+  );
 };
 
 const Logout = () => {
   return (
-    auth.currentUser && <button onClick={() => auth.signOut()}>Logout</button>
+    auth.currentUser && (
+      <button className="login" onClick={() => auth.signOut()}>
+        Logout
+      </button>
+    )
   );
 };
 
